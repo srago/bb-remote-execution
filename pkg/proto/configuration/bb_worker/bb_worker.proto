@@ -67,6 +67,10 @@ message ApplicationConfiguration {
   // https://github.com/buildbarn/bb-adrs/blob/master/0006-operation-logging-and-monetary-resource-usage.md
   // for more details around the Completed Action Logger service.
   repeated CompletedActionLoggingConfiguration completed_action_loggers = 23;
+
+  // File systems to monitor.  This is ignored unless prometheus is enabled
+  // in the global config.
+  repeated string monitored_file_systems = 24;
 }
 
 message BuildDirectoryConfiguration {

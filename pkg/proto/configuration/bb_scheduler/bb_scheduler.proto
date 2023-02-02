@@ -82,6 +82,10 @@ message ApplicationConfiguration {
   // Authorization requirements to be enforced for Execute and WaitExecution
   // requests.
   buildbarn.configuration.auth.AuthorizerConfiguration execute_authorizer = 15;
+
+  // File systems to monitor.  This is ignored unless prometheus is enabled
+  // in the global config.
+  repeated string monitored_file_systems = 16;
 }
 
 message AWSASGLifecycleHookConfiguration {
