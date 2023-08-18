@@ -23,7 +23,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"google.golang.org/genproto/googleapis/longrunning"
+	"cloud.google.com/go/longrunning/autogen/longrunningpb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -393,7 +393,7 @@ func TestInMemoryBuildQueuePurgeStaleWorkersAndQueues(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	})
@@ -453,7 +453,7 @@ func TestInMemoryBuildQueuePurgeStaleWorkersAndQueues(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	executingMessage := &longrunning.Operation{
+	executingMessage := &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	}
@@ -490,11 +490,11 @@ func TestInMemoryBuildQueuePurgeStaleWorkersAndQueues(t *testing.T) {
 		Status: status.New(codes.Unavailable, "Worker {\"hostname\":\"worker123\",\"thread\":\"42\"} disappeared while task was executing").Proto(),
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 		Done:     true,
-		Result:   &longrunning.Operation_Response{Response: executeResponse},
+		Result:   &longrunningpb.Operation_Response{Response: executeResponse},
 	})
 
 	// Even with the worker being gone, it's permitted to enqueue
@@ -549,7 +549,7 @@ func TestInMemoryBuildQueuePurgeStaleWorkersAndQueues(t *testing.T) {
 			},
 		})
 		require.NoError(t, err)
-		testutil.RequireEqualProto(t, &longrunning.Operation{
+		testutil.RequireEqualProto(t, &longrunningpb.Operation{
 			Name:     fakeUUID,
 			Metadata: metadata,
 		}, update)
@@ -598,11 +598,11 @@ func TestInMemoryBuildQueuePurgeStaleWorkersAndQueues(t *testing.T) {
 			Status: status.New(codes.Unavailable, "Workers for this instance name, platform and size class disappeared while task was queued").Proto(),
 		})
 		require.NoError(t, err)
-		testutil.RequireEqualProto(t, update, &longrunning.Operation{
+		testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 			Name:     fakeUUID,
 			Metadata: metadata,
 			Done:     true,
-			Result:   &longrunning.Operation_Response{Response: executeResponse},
+			Result:   &longrunningpb.Operation_Response{Response: executeResponse},
 		})
 	}
 }
@@ -710,7 +710,7 @@ func TestInMemoryBuildQueuePurgeStaleOperations(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	})
@@ -750,7 +750,7 @@ func TestInMemoryBuildQueuePurgeStaleOperations(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	})
@@ -776,7 +776,7 @@ func TestInMemoryBuildQueuePurgeStaleOperations(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	})
@@ -981,7 +981,7 @@ func TestInMemoryBuildQueueKillOperation(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	})
@@ -1051,7 +1051,7 @@ func TestInMemoryBuildQueueKillOperation(t *testing.T) {
 					SizeBytes: 123,
 				},
 			})
-			testutil.RequireEqualProto(t, &longrunning.Operation{
+			testutil.RequireEqualProto(t, &longrunningpb.Operation{
 				Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 				Metadata: metadata,
 			}, update)
@@ -1116,11 +1116,11 @@ func TestInMemoryBuildQueueKillOperation(t *testing.T) {
 		Status: status.New(codes.Internal, "Attempted to execute task 10 times, but it never completed. This task may cause worker {\"hostname\":\"worker123\",\"thread\":\"42\"} to crash.").Proto(),
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 		Done:     true,
-		Result:   &longrunning.Operation_Response{Response: executeResponse},
+		Result:   &longrunningpb.Operation_Response{Response: executeResponse},
 	})
 }
 
@@ -1228,7 +1228,7 @@ func TestInMemoryBuildQueueCrashLoopingWorker(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	})
@@ -1289,7 +1289,7 @@ func TestInMemoryBuildQueueCrashLoopingWorker(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, &longrunning.Operation{
+	testutil.RequireEqualProto(t, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	}, update)
@@ -1317,11 +1317,11 @@ func TestInMemoryBuildQueueCrashLoopingWorker(t *testing.T) {
 		Status: status.New(codes.Unavailable, "Operation was killed administratively").Proto(),
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 		Done:     true,
-		Result:   &longrunning.Operation_Response{Response: executeResponse},
+		Result:   &longrunningpb.Operation_Response{Response: executeResponse},
 	})
 
 	// The worker should be requested to switch back to idle the
@@ -1618,7 +1618,7 @@ func TestInMemoryBuildQueueDrainedWorker(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	})
@@ -1723,7 +1723,7 @@ func TestInMemoryBuildQueueDrainedWorker(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, &longrunning.Operation{
+	testutil.RequireEqualProto(t, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	}, update)
@@ -1883,7 +1883,7 @@ func TestInMemoryBuildQueueInvocationFairness(t *testing.T) {
 			},
 		})
 		require.NoError(t, err)
-		testutil.RequireEqualProto(t, update, &longrunning.Operation{
+		testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 			Name:     p.operationName,
 			Metadata: metadata,
 		})
@@ -2017,7 +2017,7 @@ func TestInMemoryBuildQueueInvocationFairness(t *testing.T) {
 			},
 		})
 		require.NoError(t, err)
-		testutil.RequireEqualProto(t, &longrunning.Operation{
+		testutil.RequireEqualProto(t, &longrunningpb.Operation{
 			Name:     p.operationName,
 			Metadata: metadata,
 		}, update)
@@ -2112,11 +2112,11 @@ func TestInMemoryBuildQueueInvocationFairness(t *testing.T) {
 			Status: status.Newf(codes.Unavailable, "Worker {\"hostname\":\"worker123\",\"thread\":\"%d\"} disappeared while task was executing", i).Proto(),
 		})
 		require.NoError(t, err)
-		testutil.RequireEqualProto(t, update, &longrunning.Operation{
+		testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 			Name:     p.operationName,
 			Metadata: metadata,
 			Done:     true,
-			Result:   &longrunning.Operation_Response{Response: executeResponse},
+			Result:   &longrunningpb.Operation_Response{Response: executeResponse},
 		})
 
 		_, err = streams[i].Recv()
@@ -2278,7 +2278,7 @@ func TestInMemoryBuildQueueInFlightDeduplicationAbandonQueued(t *testing.T) {
 			},
 		})
 		require.NoError(t, err)
-		testutil.RequireEqualProto(t, &longrunning.Operation{
+		testutil.RequireEqualProto(t, &longrunningpb.Operation{
 			Name:     p.operationName,
 			Metadata: metadata,
 		}, update)
@@ -2484,7 +2484,7 @@ func TestInMemoryBuildQueueInFlightDeduplicationAbandonExecuting(t *testing.T) {
 			},
 		})
 		require.NoError(t, err)
-		testutil.RequireEqualProto(t, &longrunning.Operation{
+		testutil.RequireEqualProto(t, &longrunningpb.Operation{
 			Name:     p.operationName,
 			Metadata: metadata,
 		}, update)
@@ -2689,7 +2689,7 @@ func TestInMemoryBuildQueuePreferBeingIdle(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, &longrunning.Operation{
+	testutil.RequireEqualProto(t, &longrunningpb.Operation{
 		Name:     "b9bb6e2c-04ff-4fbd-802b-105be93a8fb7",
 		Metadata: metadata,
 	}, update)
@@ -2723,7 +2723,7 @@ func TestInMemoryBuildQueuePreferBeingIdle(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, &longrunning.Operation{
+	testutil.RequireEqualProto(t, &longrunningpb.Operation{
 		Name:     "b9bb6e2c-04ff-4fbd-802b-105be93a8fb7",
 		Metadata: metadata,
 	}, update)
@@ -2827,11 +2827,11 @@ func TestInMemoryBuildQueuePreferBeingIdle(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "b9bb6e2c-04ff-4fbd-802b-105be93a8fb7",
 		Metadata: metadata,
 		Done:     true,
-		Result:   &longrunning.Operation_Response{Response: executeResponse},
+		Result:   &longrunningpb.Operation_Response{Response: executeResponse},
 	})
 
 	_, err = stream.Recv()
@@ -2974,7 +2974,7 @@ func TestInMemoryBuildQueueMultipleSizeClasses(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	})
@@ -3030,7 +3030,7 @@ func TestInMemoryBuildQueueMultipleSizeClasses(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, &longrunning.Operation{
+	testutil.RequireEqualProto(t, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	}, update)
@@ -3091,7 +3091,7 @@ func TestInMemoryBuildQueueMultipleSizeClasses(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	})
@@ -3149,7 +3149,7 @@ func TestInMemoryBuildQueueMultipleSizeClasses(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, &longrunning.Operation{
+	testutil.RequireEqualProto(t, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	}, update)
@@ -3227,11 +3227,11 @@ func TestInMemoryBuildQueueMultipleSizeClasses(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 		Done:     true,
-		Result:   &longrunning.Operation_Response{Response: executeResponse},
+		Result:   &longrunningpb.Operation_Response{Response: executeResponse},
 	})
 }
 
@@ -3350,7 +3350,7 @@ func TestInMemoryBuildQueueBackgroundRun(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	})
@@ -3406,7 +3406,7 @@ func TestInMemoryBuildQueueBackgroundRun(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, &longrunning.Operation{
+	testutil.RequireEqualProto(t, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 	}, update)
@@ -3487,11 +3487,11 @@ func TestInMemoryBuildQueueBackgroundRun(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadata,
 		Done:     true,
-		Result:   &longrunning.Operation_Response{Response: executeResponse},
+		Result:   &longrunningpb.Operation_Response{Response: executeResponse},
 	})
 
 	// Let the worker for the smaller size class pick up the
@@ -3713,7 +3713,7 @@ func TestInMemoryBuildQueueIdleSynchronizingWorkers(t *testing.T) {
 	require.NoError(t, err)
 	update, err := stream1.Recv()
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadataExecuting,
 	})
@@ -3771,11 +3771,11 @@ func TestInMemoryBuildQueueIdleSynchronizingWorkers(t *testing.T) {
 
 	update, err = stream1.Recv()
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 		Metadata: metadataCompleted,
 		Done:     true,
-		Result:   &longrunning.Operation_Response{Response: executeResponse},
+		Result:   &longrunningpb.Operation_Response{Response: executeResponse},
 	})
 	_, err = stream1.Recv()
 	require.Equal(t, io.EOF, err)
@@ -3861,7 +3861,7 @@ func TestInMemoryBuildQueueIdleSynchronizingWorkers(t *testing.T) {
 	require.NoError(t, err)
 	update, err = stream2.Recv()
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "e98bb734-0ec7-4cc5-bb98-bb3d5c0788c2",
 		Metadata: metadataExecuting,
 	})
@@ -3917,11 +3917,11 @@ func TestInMemoryBuildQueueIdleSynchronizingWorkers(t *testing.T) {
 
 	update, err = stream2.Recv()
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "e98bb734-0ec7-4cc5-bb98-bb3d5c0788c2",
 		Metadata: metadataCompleted,
 		Done:     true,
-		Result:   &longrunning.Operation_Response{Response: executeResponse},
+		Result:   &longrunningpb.Operation_Response{Response: executeResponse},
 	})
 	_, err = stream1.Recv()
 	require.Equal(t, io.EOF, err)
@@ -3969,7 +3969,7 @@ func TestInMemoryBuildQueueIdleSynchronizingWorkers(t *testing.T) {
 	require.NoError(t, err)
 	update, err = stream3.Recv()
 	require.NoError(t, err)
-	testutil.RequireEqualProto(t, update, &longrunning.Operation{
+	testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 		Name:     "a0942b25-9c84-42da-93cb-cbd16cf61917",
 		Metadata: metadataExecuting,
 	})
@@ -4091,7 +4091,7 @@ func TestInMemoryBuildQueueWorkerInvocationStickinessLimit(t *testing.T) {
 			},
 		})
 		require.NoError(t, err)
-		testutil.RequireEqualProto(t, update, &longrunning.Operation{
+		testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 			Name:     p.operationName,
 			Metadata: metadata,
 		})
@@ -4164,7 +4164,7 @@ func TestInMemoryBuildQueueWorkerInvocationStickinessLimit(t *testing.T) {
 		})
 		require.NoError(t, err)
 		operationName := operationParameters[operationIndex].operationName
-		testutil.RequireEqualProto(t, update, &longrunning.Operation{
+		testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 			Name:     operationName,
 			Metadata: metadata,
 		})
@@ -4212,11 +4212,11 @@ func TestInMemoryBuildQueueWorkerInvocationStickinessLimit(t *testing.T) {
 			Result: &remoteexecution.ActionResult{},
 		})
 		require.NoError(t, err)
-		testutil.RequireEqualProto(t, update, &longrunning.Operation{
+		testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 			Name:     operationName,
 			Metadata: metadata,
 			Done:     true,
-			Result:   &longrunning.Operation_Response{Response: executeResponse},
+			Result:   &longrunningpb.Operation_Response{Response: executeResponse},
 		})
 	}
 }
@@ -4325,7 +4325,7 @@ func TestInMemoryBuildQueueAuthorization(t *testing.T) {
 				SizeBytes: 456,
 			},
 		})
-		testutil.RequireEqualProto(t, update, &longrunning.Operation{
+		testutil.RequireEqualProto(t, update, &longrunningpb.Operation{
 			Name:     "36ebab65-3c4f-4faf-818b-2eabb4cd1b02",
 			Metadata: metadata,
 		})
