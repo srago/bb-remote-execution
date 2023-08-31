@@ -401,6 +401,7 @@ def go_dependencies():
     go_repository(
         name = "com_github_golang_protobuf",
         importpath = "github.com/golang/protobuf",
+        patches = ["@com_github_buildbarn_bb_storage//:patches/com_github_golang_protobuf/service-registrar.diff"],
         sum = "h1:KhyjKVUg7Usr/dYsdSqoFveMYd5ko72D+zANwlG1mmg=",
         version = "v1.5.3",
     )
