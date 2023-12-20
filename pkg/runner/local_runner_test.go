@@ -262,7 +262,7 @@ func TestLocalRunner(t *testing.T) {
 			InputRootDirectory: "UnknownCommandDirectory/root",
 			TemporaryDirectory: "UnknownCommandDirectory/tmp",
 		})
-		testutil.RequirePrefixedStatus(t, status.Error(codes.InvalidArgument, "Failed to start process: "), err)
+		testutil.RequirePrefixedStatus(t, status.Error(codes.Internal, "Failed to start process: "), err)
 	})
 
 	t.Run("BuildDirectoryEscape", func(t *testing.T) {
@@ -283,10 +283,10 @@ func TestLocalRunner(t *testing.T) {
 			InputRootDirectory: ".",
 			TemporaryDirectory: ".",
 		})
-		require.Equal(
+		testutil.RequireEqualStatus(
 			t,
-			err,
-			status.Error(codes.InvalidArgument, "Failed to open stdout path \"hello/../../../../../../etc/passwd\": Path resolves to a location outside the build directory"))
+			status.Error(codes.InvalidArgument, "Failed to open stdout path \"hello/../../../../../../etc/passwd\": Path resolves to a location outside the build directory"),
+			err)
 	})
 
 	// TODO: Improve testing coverage of LocalRunner.

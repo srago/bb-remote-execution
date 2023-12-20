@@ -185,7 +185,7 @@ func TestPoolBackedFileAllocatorFUSELseek(t *testing.T) {
 		// I/O errors on the file should be captured.
 		underlyingFile.EXPECT().GetNextRegionOffset(int64(123), filesystem.Data).
 			Return(int64(0), status.Error(codes.Internal, "Disk on fire"))
-		errorLogger.EXPECT().Log(status.Error(codes.Internal, "Failed to get next region offset at offset 123: Disk on fire"))
+		errorLogger.EXPECT().Log(testutil.EqStatus(t, status.Error(codes.Internal, "Failed to get next region offset at offset 123: Disk on fire")))
 
 		var out go_fuse.LseekOut
 		require.Equal(t, go_fuse.EIO, f.FUSELseek(&go_fuse.LseekIn{
@@ -283,7 +283,7 @@ func TestPoolBackedFileAllocatorFUSEReadFailure(t *testing.T) {
 	underlyingFile.EXPECT().Close()
 
 	errorLogger := mock.NewMockErrorLogger(ctrl)
-	errorLogger.EXPECT().Log(status.Error(codes.Unavailable, "Failed to read from file at offset 42: Storage backends offline"))
+	errorLogger.EXPECT().Log(testutil.EqStatus(t, status.Error(codes.Unavailable, "Failed to read from file at offset 42: Storage backends offline")))
 
 	inodeNumberGenerator := mock.NewMockThreadSafeGenerator(ctrl)
 	inodeNumberGenerator.EXPECT().Uint64().Return(uint64(42))
@@ -341,7 +341,7 @@ func TestPoolBackedFileAllocatorFUSETruncateFailure(t *testing.T) {
 	underlyingFile.EXPECT().Close()
 
 	errorLogger := mock.NewMockErrorLogger(ctrl)
-	errorLogger.EXPECT().Log(status.Error(codes.Unavailable, "Failed to truncate file to length 42: Storage backends offline"))
+	errorLogger.EXPECT().Log(testutil.EqStatus(t, status.Error(codes.Unavailable, "Failed to truncate file to length 42: Storage backends offline")))
 
 	inodeNumberGenerator := mock.NewMockThreadSafeGenerator(ctrl)
 	inodeNumberGenerator.EXPECT().Uint64().Return(uint64(42))
@@ -372,7 +372,7 @@ func TestPoolBackedFileAllocatorFUSEWriteFailure(t *testing.T) {
 	underlyingFile.EXPECT().Close()
 
 	errorLogger := mock.NewMockErrorLogger(ctrl)
-	errorLogger.EXPECT().Log(status.Error(codes.Unavailable, "Failed to write to file at offset 42: Storage backends offline"))
+	errorLogger.EXPECT().Log(testutil.EqStatus(t, status.Error(codes.Unavailable, "Failed to write to file at offset 42: Storage backends offline")))
 
 	inodeNumberGenerator := mock.NewMockThreadSafeGenerator(ctrl)
 	inodeNumberGenerator.EXPECT().Uint64().Return(uint64(42))
@@ -415,7 +415,7 @@ func TestPoolBackedFileAllocatorFUSEUploadFile(t *testing.T) {
 		contentAddressableStorage := mock.NewMockBlobAccess(ctrl)
 
 		_, err := f.UploadFile(ctx, contentAddressableStorage, digestFunction)
-		require.Equal(t, status.Error(codes.Internal, "Failed to compute file digest: input/output error"), err)
+		testutil.RequireEqualStatus(t, status.Error(codes.Internal, "Failed to compute file digest: input/output error"), err)
 	})
 
 	t.Run("UploadFailure", func(t *testing.T) {
@@ -431,7 +431,7 @@ func TestPoolBackedFileAllocatorFUSEUploadFile(t *testing.T) {
 			})
 
 		_, err := f.UploadFile(ctx, contentAddressableStorage, digestFunction)
-		require.Equal(t, status.Error(codes.Internal, "Failed to upload file: Server on fire"), err)
+		testutil.RequireEqualStatus(t, status.Error(codes.Internal, "Failed to upload file: Server on fire"), err)
 	})
 
 	t.Run("Success", func(t *testing.T) {

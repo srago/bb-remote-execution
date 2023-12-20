@@ -880,9 +880,9 @@ func TestInMemoryPrepopulatedDirectoryFUSEReadDirPlus(t *testing.T) {
 		childDirectory.EXPECT().FetchContents().
 			Return(nil, status.Error(codes.Unavailable, "Storage on fire"))
 		errorLogger.EXPECT().Log(
-			status.Error(
+			testutil.EqStatus(t, status.Error(
 				codes.Unavailable,
-				"Failed to initialize directory: Storage on fire"))
+				"Failed to initialize directory: Storage on fire")))
 
 		d2, _, err := d.LookupChild(path.MustNewComponent("directory"))
 		require.NoError(t, err)

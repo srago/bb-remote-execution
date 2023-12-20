@@ -8,6 +8,7 @@ import (
 	"github.com/buildbarn/bb-remote-execution/pkg/blobstore"
 	"github.com/buildbarn/bb-storage/pkg/blobstore/buffer"
 	"github.com/buildbarn/bb-storage/pkg/digest"
+	"github.com/buildbarn/bb-storage/pkg/testutil"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
@@ -131,22 +132,25 @@ func TestBatchedStoreBlobAccessFailure(t *testing.T) {
 		"default",
 		"6fc422233a40a75a1f028e11c3cd1140",
 		7)
-	require.Equal(
+	testutil.RequireEqualStatus(
 		t,
-		blobAccess.Put(ctx, digestGoodbye, buffer.NewValidatedBufferFromByteSlice([]byte("Goodbye"))),
-		status.Error(codes.Internal, "Failed to store previous blob 8b1a9953c4611296a827abf8c47804d7-5-default: Storage backend on fire"))
+		status.Error(codes.Internal, "Failed to store previous blob 8b1a9953c4611296a827abf8c47804d7-5-default: Storage backend on fire"),
+		blobAccess.Put(ctx, digestGoodbye, buffer.NewValidatedBufferFromByteSlice([]byte("Goodbye"))))
 
 	// Future requests to store blobs should be discarded
 	// immediately, returning same error.
-	require.Equal(
+	testutil.RequireEqualStatus(
 		t,
-		blobAccess.Put(ctx, digestGoodbye, buffer.NewValidatedBufferFromByteSlice([]byte("Goodbye"))),
-		status.Error(codes.Internal, "Failed to store previous blob 8b1a9953c4611296a827abf8c47804d7-5-default: Storage backend on fire"))
+		status.Error(codes.Internal, "Failed to store previous blob 8b1a9953c4611296a827abf8c47804d7-5-default: Storage backend on fire"),
+		blobAccess.Put(ctx, digestGoodbye, buffer.NewValidatedBufferFromByteSlice([]byte("Goodbye"))))
 
 	// Flushing should not cause any requests on the backend, due to
 	// it being in the error state. It should return the error that
 	// caused it to go into the error state.
-	require.Equal(t, flush(ctx), status.Error(codes.Internal, "Failed to store previous blob 8b1a9953c4611296a827abf8c47804d7-5-default: Storage backend on fire"))
+	testutil.RequireEqualStatus(
+		t,
+		status.Error(codes.Internal, "Failed to store previous blob 8b1a9953c4611296a827abf8c47804d7-5-default: Storage backend on fire"),
+		flush(ctx))
 
 	// Successive stores and flushes should be functional once again.
 	require.NoError(t, blobAccess.Put(ctx, digestGoodbye, buffer.NewValidatedBufferFromByteSlice([]byte("Goodbye"))))

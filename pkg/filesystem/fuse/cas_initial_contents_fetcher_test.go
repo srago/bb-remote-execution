@@ -11,6 +11,7 @@ import (
 	"github.com/buildbarn/bb-remote-execution/pkg/filesystem/fuse"
 	"github.com/buildbarn/bb-storage/pkg/digest"
 	"github.com/buildbarn/bb-storage/pkg/filesystem/path"
+	"github.com/buildbarn/bb-storage/pkg/testutil"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
@@ -36,7 +37,7 @@ func TestCASInitialContentsFetcherFetchContents(t *testing.T) {
 		directoryWalker.EXPECT().GetDescription().Return("Root directory")
 
 		_, err := initialContentsFetcher.FetchContents()
-		require.Equal(t, status.Error(codes.Internal, "Root directory: Server failure"), err)
+		testutil.RequireEqualStatus(t, status.Error(codes.Internal, "Root directory: Server failure"), err)
 	})
 
 	t.Run("ChildDirectoryInvalidName", func(t *testing.T) {
@@ -56,7 +57,7 @@ func TestCASInitialContentsFetcherFetchContents(t *testing.T) {
 		directoryWalker.EXPECT().GetDescription().Return("Root directory")
 
 		_, err := initialContentsFetcher.FetchContents()
-		require.Equal(t, status.Error(codes.InvalidArgument, "Root directory: Directory \"..\" has an invalid name"), err)
+		testutil.RequireEqualStatus(t, status.Error(codes.InvalidArgument, "Root directory: Directory \"..\" has an invalid name"), err)
 	})
 
 	t.Run("ChildDirectoryInvalidDigest", func(t *testing.T) {
@@ -74,7 +75,7 @@ func TestCASInitialContentsFetcherFetchContents(t *testing.T) {
 		directoryWalker.EXPECT().GetDescription().Return("Root directory")
 
 		_, err := initialContentsFetcher.FetchContents()
-		require.Equal(t, status.Error(codes.InvalidArgument, "Root directory: Failed to obtain digest for directory \"hello\": Unknown digest hash length: 18 characters"), err)
+		testutil.RequireEqualStatus(t, status.Error(codes.InvalidArgument, "Root directory: Failed to obtain digest for directory \"hello\": Unknown digest hash length: 18 characters"), err)
 	})
 
 	t.Run("Success", func(t *testing.T) {
@@ -179,7 +180,7 @@ func TestCASInitialContentsFetcherGetContainingDigests(t *testing.T) {
 		directoryWalker.EXPECT().GetDescription().Return("Root directory")
 
 		_, err := initialContentsFetcher.GetContainingDigests(ctx)
-		require.Equal(t, status.Error(codes.Internal, "Root directory: Server failure"), err)
+		testutil.RequireEqualStatus(t, status.Error(codes.Internal, "Root directory: Server failure"), err)
 	})
 
 	t.Run("ChildDirectoryInvalidDigest", func(t *testing.T) {
@@ -199,7 +200,7 @@ func TestCASInitialContentsFetcherGetContainingDigests(t *testing.T) {
 		directoryWalker.EXPECT().GetDescription().Return("Root directory")
 
 		_, err := initialContentsFetcher.GetContainingDigests(ctx)
-		require.Equal(t, status.Error(codes.InvalidArgument, "Root directory: Failed to obtain digest for directory \"hello\": Unknown digest hash length: 18 characters"), err)
+		testutil.RequireEqualStatus(t, status.Error(codes.InvalidArgument, "Root directory: Failed to obtain digest for directory \"hello\": Unknown digest hash length: 18 characters"), err)
 	})
 
 	t.Run("ChildFileInvalidDigest", func(t *testing.T) {
@@ -219,7 +220,7 @@ func TestCASInitialContentsFetcherGetContainingDigests(t *testing.T) {
 		directoryWalker.EXPECT().GetDescription().Return("Root directory")
 
 		_, err := initialContentsFetcher.GetContainingDigests(ctx)
-		require.Equal(t, status.Error(codes.InvalidArgument, "Root directory: Failed to obtain digest for file \"hello\": Unknown digest hash length: 18 characters"), err)
+		testutil.RequireEqualStatus(t, status.Error(codes.InvalidArgument, "Root directory: Failed to obtain digest for file \"hello\": Unknown digest hash length: 18 characters"), err)
 	})
 
 	t.Run("Success", func(t *testing.T) {
