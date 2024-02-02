@@ -155,6 +155,10 @@ message ApplicationConfiguration {
   // The disadvantage of enabling this option is that a larger number of
   // objects are written into the CAS.
   bool force_upload_trees_and_directories = 27;
+
+  // File systems to monitor.  This is ignored unless prometheus is enabled
+  // in the global config.
+  repeated string monitored_file_systems = 28;
 }
 
 message BuildDirectoryConfiguration {
