@@ -41,7 +41,7 @@ func main() {
 		if err := util.UnmarshalConfigurationFromFile(os.Args[1], &configuration); err != nil {
 			return util.StatusWrapf(err, "Failed to read configuration from %s", os.Args[1])
 		}
-		lifecycleState, _, err := global.ApplyConfiguration(configuration.Global)
+		lifecycleState, _, err := global.ApplyConfiguration(configuration.Global, nil)
 		if err != nil {
 			return util.StatusWrap(err, "Failed to apply global configuration options")
 		}

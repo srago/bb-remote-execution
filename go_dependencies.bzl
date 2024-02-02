@@ -172,9 +172,12 @@ def go_dependencies():
     )
     go_repository(
         name = "com_github_buildbarn_bb_storage",
-        importpath = "github.com/buildbarn/bb-storage",
-        sum = "h1:/39JibX2GcYXr5RS/XQo27GSrjrK6lAC7CR1eeubJEc=",
-        version = "v0.0.0-20240222075657-f52022cbad94",
+        #importpath = "github.com/buildbarn/bb-storage",
+        #sum = "h1:/39JibX2GcYXr5RS/XQo27GSrjrK6lAC7CR1eeubJEc=",
+        #version = "v0.0.0-20240222075657-f52022cbad94",
+        importpath = "github.com/srago/bb-storage",
+        sum = "h1:EOIhbiCBMJ6MjH3ksX3UTTj8FogNtHbCf15vNlBvIHY=",
+        version = "v0.0.0-20240307225443-329bef54a530",
     )
     go_repository(
         name = "com_github_buildbarn_go_xdr",
@@ -626,6 +629,12 @@ def go_dependencies():
         version = "v1.0.5",
     )
     go_repository(
+        name = "com_github_spiffe_go_spiffe_v2",
+        importpath = "github.com/spiffe/go-spiffe/v2",
+        sum = "h1:4SdizuQieFyL9eNU+SPiCArH4kynzaKOOj0VvM8R7Xo=",
+        version = "v2.1.6",
+    )
+    go_repository(
         name = "com_github_stretchr_objx",
         importpath = "github.com/stretchr/objx",
         sum = "h1:1zr/of2m5FGMsad5YfcqgdqdWrIhu+EBEJRhR1U7z/c=",
@@ -648,6 +657,12 @@ def go_dependencies():
         importpath = "github.com/yuin/goldmark",
         sum = "h1:fVcFKWvrslecOb/tg+Cc05dkeYx540o0FuFt3nUVDoE=",
         version = "v1.4.13",
+    )
+    go_repository(
+        name = "com_github_zeebo_errs",
+        importpath = "github.com/zeebo/errs",
+        sum = "h1:hmiaKqgYZzcVgRL1Vkc1Mn2914BbzB0IBxs+ebeutGs=",
+        version = "v1.3.0",
     )
     go_repository(
         name = "com_google_cloud_go",

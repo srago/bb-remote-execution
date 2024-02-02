@@ -153,6 +153,10 @@ message ApplicationConfiguration {
   //
   // Recommended value: 900s
   google.protobuf.Duration platform_queue_with_no_workers_timeout = 18;
+
+  // File systems to monitor.  This is ignored unless prometheus is enabled
+  // in the global config.
+  repeated string monitored_file_systems = 23;
 }
 
 message PredeclaredPlatformQueueConfiguration {
