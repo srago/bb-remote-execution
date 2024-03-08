@@ -611,6 +611,12 @@ def go_dependencies():
         version = "v1.10.0",
     )
     go_repository(
+        name = "com_github_sercand_kuberesolver_v5",
+        importpath = "github.com/sercand/kuberesolver/v5",
+        sum = "h1:CYH+d67G0sGBj7q5wLK61yzqJJ8gLLC8aeprPTHb6yY=",
+        version = "v5.1.1",
+    )
+    go_repository(
         name = "com_github_sergi_go_diff",
         importpath = "github.com/sergi/go-diff",
         sum = "h1:we8PVUC3FE2uYfodKH/nBHMSetSfHDR6scGdBi+erh0=",
