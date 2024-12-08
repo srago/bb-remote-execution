@@ -5,6 +5,14 @@ go 1.23.0
 // Using the most recent version causes a cyclic dependency in protoc.
 replace google.golang.org/protobuf => google.golang.org/protobuf v1.32.0
 
+// rules_go doesn't support gomock's package mode.
+replace go.uber.org/mock => go.uber.org/mock v0.4.0
+
+// https://github.com/bazel-contrib/rules_go/issues/4170
+replace golang.org/x/tools => golang.org/x/tools v0.26.0
+
+replace google.golang.org/grpc => google.golang.org/grpc v1.67.0
+
 require (
 	cloud.google.com/go/longrunning v0.6.1
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
@@ -100,6 +108,7 @@ require (
 	golang.org/x/text v0.18.0 // indirect
 	golang.org/x/time v0.6.0 // indirect
 	golang.org/x/tools v0.25.0 // indirect
+
 	google.golang.org/api v0.198.0 // indirect
 	google.golang.org/genproto v0.0.0-20240903143218-8af14fe29dc1 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240903143218-8af14fe29dc1 // indirect

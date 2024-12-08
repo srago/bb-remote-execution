@@ -5,7 +5,7 @@ bazel_dep(name = "aspect_rules_js", version = "2.0.1")
 bazel_dep(name = "bazel_remote_apis", version = "0.0.0")
 bazel_dep(name = "com_github_buildbarn_bb_storage")
 bazel_dep(name = "com_github_buildbarn_go_xdr")
-bazel_dep(name = "gazelle", version = "0.38.0")
+bazel_dep(name = "gazelle", version = "0.40.0")
 bazel_dep(name = "googleapis", version = "0.0.0-20240326-1c8d509c5")
 bazel_dep(name = "protobuf", version = "27.3")
 bazel_dep(name = "rules_go", version = "0.50.0")
@@ -15,6 +15,10 @@ bazel_dep(name = "rules_pkg", version = "1.0.1")
 bazel_dep(name = "rules_proto", version = "6.0.2")
 bazel_dep(name = "toolchains_llvm", version = "1.1.2")
 
+bazel_dep(name = "rules_nodejs", version = "6.3.0")
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node", dev_dependency = True)
+node.toolchain(node_version = "16.20.2")
+
 git_override(
     module_name = "bazel_remote_apis",
     commit = "a6328f5026d3b2ae27bd8efd86a0f1057ccab361",
@@ -23,8 +27,8 @@ git_override(
 
 git_override(
     module_name = "com_github_buildbarn_bb_storage",
-    commit = "256ec6c483a05f1aeefff6fc57a2044f746c5a08",
-    remote = "https://github.com/buildbarn/bb-storage.git",
+    commit = "7d03419ecbc30b43b89eebd1accccaa970d68a44",
+    remote = "https://github.com/srago/bb-storage.git",
 )
 
 git_override(
@@ -55,6 +59,9 @@ single_version_override(
 
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
+go_deps.gazelle_default_attributes(
+    build_file_generation = "on",
+)
 use_repo(
     go_deps,
     "cc_mvdan_gofumpt",

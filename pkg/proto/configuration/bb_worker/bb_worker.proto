@@ -158,7 +158,7 @@ message ApplicationConfiguration {
 
   // File systems to monitor.  This is ignored unless prometheus is enabled
   // in the global config.
-  repeated string monitored_file_systems = 28;
+  repeated string monitored_file_systems = 29;
 }
 
 message BuildDirectoryConfiguration {
