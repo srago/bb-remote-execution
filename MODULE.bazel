@@ -27,7 +27,7 @@ git_override(
 
 git_override(
     module_name = "com_github_buildbarn_bb_storage",
-    commit = "7d03419ecbc30b43b89eebd1accccaa970d68a44",
+    commit = "c8f8829cb612bd21991aff368bbea53e49120e4d",
     remote = "https://github.com/srago/bb-storage.git",
 )
 
