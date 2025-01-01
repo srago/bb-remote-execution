@@ -266,7 +266,6 @@ func (bc *BuildClient) Run(ctx context.Context) (bool, error) {
 		log.Printf("Failed to synchronize with scheduler: %v", err)
 		return false, util.StatusWrap(err, "Failed to synchronize with scheduler")
 	}
-	log.Printf("Synchronized with scheduler")
 
 	// Determine when we should contact the scheduler again in case
 	// of no activity.
