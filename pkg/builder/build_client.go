@@ -263,7 +263,6 @@ func (bc *BuildClient) Run(ctx context.Context) (bool, error) {
 		bc.touchSchedulerMayThinkExecuting()
 	}
 	if err != nil {
-		log.Printf("Failed to synchronize with scheduler: %v", err)
 		return false, util.StatusWrap(err, "Failed to synchronize with scheduler")
 	}
 
