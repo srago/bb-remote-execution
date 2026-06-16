@@ -452,11 +452,17 @@ func main() {
 							remoteCompletedActionLogger.instanceNamePatcher)
 					}
 
-					buildExecutor = builder.NewTracingBuildExecutor(
-						builder.NewLoggingBuildExecutor(
+					if configuration.DisableLogActionsAndResults {
+						buildExecutor = builder.NewTracingBuildExecutor(
 							buildExecutor,
-							browserURL),
-						tracerProvider)
+							tracerProvider)
+					} else {
+						buildExecutor = builder.NewTracingBuildExecutor(
+							builder.NewLoggingBuildExecutor(
+								buildExecutor,
+								browserURL),
+							tracerProvider)
+					}
 
 					instanceNamePrefix, err := digest.NewInstanceName(runnerConfiguration.InstanceNamePrefix)
 					if err != nil {

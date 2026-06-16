@@ -159,6 +159,10 @@ message ApplicationConfiguration {
   // File systems to monitor.  This is ignored unless prometheus is enabled
   // in the global config.
   repeated string monitored_file_systems = 29;
+
+  // Choose whether to log actions and results.  This is a negative flag so
+  // that the default action remains to continue logging if this isn't set.
+  bool disable_log_actions_and_results = 30;
 }
 
 message BuildDirectoryConfiguration {
